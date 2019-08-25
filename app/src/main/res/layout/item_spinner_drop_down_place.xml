@@ -4,7 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fontFamily="@font/db_heavent"
-    android:gravity="center"
+    android:gravity="end|center_vertical"
     android:orientation="vertical"
-    android:padding="8dp"
+    android:paddingStart="0dp"
+    android:paddingTop="8dp"
+    android:paddingEnd="36dp"
+    android:paddingBottom="6dp"
     android:textSize="24sp" />

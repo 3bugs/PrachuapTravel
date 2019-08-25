@@ -12,27 +12,36 @@
         android:id="@+id/place_spinner"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/button"
-        app:layout_constraintEnd_toStartOf="@+id/button"
+        android:layout_marginEnd="0dp"
+        android:background="@drawable/bg_spinner"
+        app:layout_constraintBottom_toBottomOf="@+id/rule_button"
+        app:layout_constraintEnd_toStartOf="@+id/rule_button"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintHorizontal_weight="2"
+        app:layout_constraintHorizontal_weight="45"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/button"
+    <TextView
+        android:id="@+id/rule_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_rule_button"
+        android:clickable="true"
         android:drawableEnd="@drawable/ic_arrow_right"
+        android:drawablePadding="8dp"
+        android:focusable="true"
         android:fontFamily="@font/db_heavent"
+        android:foreground="?attr/selectableItemBackground"
+        android:gravity="end"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
         android:text="ข้อแนะนำ/ข้อปฏิบัติ"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintHorizontal_weight="3"
+        app:layout_constraintHorizontal_weight="60"
         app:layout_constraintStart_toEndOf="@+id/place_spinner"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="UnusedAttribute" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

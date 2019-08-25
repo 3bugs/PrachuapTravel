@@ -37,10 +37,10 @@ public class MainFragment extends Fragment {
         String[] placeList = getResources().getStringArray(R.array.place_names);
         SpinnerWithHintArrayAdapter adapter = new SpinnerWithHintArrayAdapter<>(
                 getContext(),
-                R.layout.item_place,
+                R.layout.item_spinner_place,
                 placeList
         );
-        adapter.setDropDownViewResource(R.layout.item_place);
+        adapter.setDropDownViewResource(R.layout.item_spinner_drop_down_place);
         placeSpinner.setAdapter(adapter);
     }
 

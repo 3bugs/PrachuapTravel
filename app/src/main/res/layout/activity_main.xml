@@ -46,15 +46,17 @@
                     android:layout_marginEnd="4dp"
                     android:background="@drawable/bg_search_edit_text"
                     android:hint="ค้นหาที่เที่ยว"
+                    android:inputType="text"
                     android:paddingTop="8dp"
                     android:paddingBottom="8dp"
                     android:textColor="#000"
                     android:textSize="22sp"
-                    app:fontFamily="@font/db_heavent"
+                    app:fontFamily="@font/db_heavent_light"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/search_image_view"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="Autofill" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.appcompat.widget.Toolbar>
