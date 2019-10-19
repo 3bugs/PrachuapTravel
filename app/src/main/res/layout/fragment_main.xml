@@ -11,17 +11,23 @@
     <Spinner
         android:id="@+id/place_spinner"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="0dp"
         android:background="@drawable/bg_spinner"
-        app:layout_constraintBottom_toBottomOf="@+id/rule_button"
-        app:layout_constraintEnd_toStartOf="@+id/rule_button"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintHorizontal_weight="45"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
+    <FrameLayout
+        android:id="@+id/place_fragment_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/place_spinner"/>
+
+    <!--<TextView
         android:id="@+id/rule_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -42,6 +48,6 @@
         app:layout_constraintHorizontal_weight="60"
         app:layout_constraintStart_toEndOf="@+id/place_spinner"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="UnusedAttribute" />
+        tools:ignore="UnusedAttribute" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
