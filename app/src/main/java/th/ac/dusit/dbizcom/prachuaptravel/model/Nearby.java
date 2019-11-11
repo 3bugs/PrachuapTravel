@@ -4,9 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
-
-public class Place {
+public class Nearby {
 
     @SerializedName("id")
     public final int id;
@@ -18,26 +16,20 @@ public class Place {
     public final String address;
     @SerializedName("phone")
     public final String phone;
-    @SerializedName("latitude")
-    public final double latitude;
-    @SerializedName("longitude")
-    public final double longitude;
-    @SerializedName("image_list")
-    public final List<String> imageList;
-    @SerializedName("nearby_list")
-    public final List<Nearby> nearbyList;
+    @SerializedName("cover_image")
+    public final String coverImage;
+    @SerializedName("type")
+    public final String type;
 
-    public Place(int id, String name, String details, String address, String phone,
-                 double latitude, double longitude, List<String> imageList, List<Nearby> nearbyList) {
+    public Nearby(int id, String name, String details, String address, String phone,
+                 String coverImage, String type) {
         this.id = id;
         this.name = name;
         this.details = details;
         this.address = address;
         this.phone = phone;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.imageList = imageList;
-        this.nearbyList = nearbyList;
+        this.coverImage = coverImage;
+        this.type = type;
     }
 
     @NonNull

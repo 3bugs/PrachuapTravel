@@ -89,6 +89,10 @@ public class MainFragment extends Fragment {
     }
 
     private void setupSpinner(@NonNull View view) {
+        mPlaceList.add(new Place(
+                0, "เลือกสถานที่", null, null, null, 0, 0, null, null
+        ));
+
         Spinner placeSpinner = view.findViewById(R.id.place_spinner);
 
         //String[] placeList = getResources().getStringArray(R.array.place_names);
@@ -102,9 +106,17 @@ public class MainFragment extends Fragment {
         placeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Fragment fragment;
+
+                if (position != mPlaceList.size() - 1) {
+                    fragment = PlacePagerFragment.newInstance(mPlaceList.get(position));
+                } else {
+                    fragment = new LandingFragment();
+                }
+
                 getChildFragmentManager().beginTransaction().replace(
                         R.id.place_fragment_container,
-                        PlacePagerFragment.newInstance(mPlaceList.get(position))
+                        fragment
                 ).commit();
             }
 
@@ -113,6 +125,7 @@ public class MainFragment extends Fragment {
 
             }
         });
+        placeSpinner.setSelection(mPlaceList.size() - 1);
     }
 
     @Override

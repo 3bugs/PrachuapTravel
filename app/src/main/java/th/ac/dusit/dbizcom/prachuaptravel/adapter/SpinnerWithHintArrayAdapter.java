@@ -33,7 +33,7 @@ public class SpinnerWithHintArrayAdapter<T> extends ArrayAdapter<T> {
         View v = super.getView(position, convertView, parent);
 
         TextView textView = v.findViewById(R.id.place_name_text_view);
-        //textView.setTextSize(20);
+        //textView.setTextSize(26);
 
         if (position == getCount()) {
             textView.setText("");

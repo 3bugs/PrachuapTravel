@@ -89,7 +89,7 @@ public class PlaceFragment extends Fragment {
         listUrl.add("http://5911011802058.msci.dusit.ac.th/chainat_tourism/images/สวนนก.png");
         listUrl.add("http://5911011802058.msci.dusit.ac.th/chainat_tourism/images/สวนส้มโอ.png");*/
 
-        RequestOptions requestOptions = new RequestOptions().fitCenter();
+        RequestOptions requestOptions = new RequestOptions().centerCrop();
 
         //.diskCacheStrategy(DiskCacheStrategy.NONE)
         //.placeholder(R.drawable.placeholder)

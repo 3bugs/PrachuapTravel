@@ -84,9 +84,9 @@ public class PlacePagerFragment extends Fragment {
                 case 0:
                     return PlaceFragment.newInstance(mPlace);
                 case 1:
-                    return NearbyFragment.newInstance(mPlace);
+                    return NearbyFragment.newInstance(mPlace, "restaurant");
                 case 2:
-                    return NearbyFragment.newInstance(mPlace);
+                    return NearbyFragment.newInstance(mPlace, "hotel");
                 case 3:
                     return MapsFragment.newInstance(mPlace);
                 default:

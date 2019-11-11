@@ -86,6 +86,46 @@ function doGetPlace()
                 return;
             }
 
+            $place['nearby_list'] = array();
+
+            $sql = "SELECT * FROM prachuap_nearby WHERE place_id = {$place['id']}";
+            if ($nearbyResult = $db->query($sql)) {
+                while ($nearbyRow = $nearbyResult->fetch_assoc()) {
+                    $nearby = array();
+                    $nearby['id'] = (int)$nearbyRow['id'];
+                    $nearby['name'] = $nearbyRow['name'];
+                    $nearby['details'] = $nearbyRow['details'];
+                    $nearby['cover_image'] = $nearbyRow['cover_image'];
+                    $nearby['address'] = $nearbyRow['address'];
+                    $nearby['phone'] = $nearbyRow['phone'];
+                    $nearby['type'] = $nearbyRow['type'];
+                    $nearby['image_list'] = array();
+
+                    $sql = "SELECT image_file_name FROM prachuap_nearby_image WHERE nearby_id = {$nearby['id']}";
+                    if ($nearbyGalleryResult = $db->query($sql)) {
+                        while ($nearbyGalleryRow = $nearbyGalleryResult->fetch_assoc()) {
+                            array_push($nearby['image_list'], $nearbyGalleryRow['image_file_name']);
+                        }
+                        $nearbyGalleryResult->close();
+                    } else {
+                        $response[KEY_ERROR_CODE] = ERROR_CODE_ERROR;
+                        $response[KEY_ERROR_MESSAGE] = 'เกิดข้อผิดพลาดในการอ่านข้อมูล (4)';
+                        $errMessage = $db->error;
+                        $response[KEY_ERROR_MESSAGE_MORE] = "$errMessage\nSQL: $sql";
+                        return;
+                    }
+
+                    array_push($place['nearby_list'], $nearby);
+                }
+                $nearbyResult->close();
+            } else {
+                $response[KEY_ERROR_CODE] = ERROR_CODE_ERROR;
+                $response[KEY_ERROR_MESSAGE] = 'เกิดข้อผิดพลาดในการอ่านข้อมูล (3)';
+                $errMessage = $db->error;
+                $response[KEY_ERROR_MESSAGE_MORE] = "$errMessage\nSQL: $sql";
+                return;
+            }
+
             array_push($placeList, $place);
         }
         $result->close();
