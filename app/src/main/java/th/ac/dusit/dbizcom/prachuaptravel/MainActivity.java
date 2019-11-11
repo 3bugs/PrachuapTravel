@@ -9,11 +9,15 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import th.ac.dusit.dbizcom.prachuaptravel.fragment.MainFragment;
+import th.ac.dusit.dbizcom.prachuaptravel.fragment.MapsFragment;
+import th.ac.dusit.dbizcom.prachuaptravel.fragment.NearbyFragment;
 import th.ac.dusit.dbizcom.prachuaptravel.fragment.PlaceFragment;
 
 public class MainActivity extends AppCompatActivity implements
         MainFragment.MainFragmentListener,
-        PlaceFragment.PlaceFragmentListener {
+        PlaceFragment.PlaceFragmentListener,
+        NearbyFragment.NearbyFragmentListener,
+        MapsFragment.MapsFragmentListener {
 
     public static final String TAG_FRAGMENT_MAIN = "main_fragment";
 

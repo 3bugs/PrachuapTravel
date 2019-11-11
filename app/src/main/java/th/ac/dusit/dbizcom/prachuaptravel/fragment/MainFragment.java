@@ -104,7 +104,7 @@ public class MainFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 getChildFragmentManager().beginTransaction().replace(
                         R.id.place_fragment_container,
-                        PlaceFragment.newInstance(mPlaceList.get(position))
+                        PlacePagerFragment.newInstance(mPlaceList.get(position))
                 ).commit();
             }
 

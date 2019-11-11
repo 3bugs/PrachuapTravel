@@ -11,10 +11,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.request.RequestOptions;
+import com.glide.slider.library.SliderLayout;
+import com.glide.slider.library.animations.DescriptionAnimation;
+import com.glide.slider.library.slidertypes.DefaultSliderView;
 import com.google.gson.Gson;
+
+import java.util.ArrayList;
 
 import th.ac.dusit.dbizcom.prachuaptravel.R;
 import th.ac.dusit.dbizcom.prachuaptravel.model.Place;
+
+import static th.ac.dusit.dbizcom.prachuaptravel.net.ApiClient.IMAGES_BASE_URL;
 
 public class PlaceFragment extends Fragment {
 
@@ -66,6 +74,50 @@ public class PlaceFragment extends Fragment {
 
         TextView phoneTextView = view.findViewById(R.id.phone_text_view);
         phoneTextView.setText(mPlace.phone);
+
+        setupImageSlider(view);
+    }
+
+    private void setupImageSlider(View view) {
+        SliderLayout mSlider = view.findViewById(R.id.slider);
+
+        ArrayList<String> listUrl = new ArrayList<>();
+        for (String fileName : mPlace.imageList) {
+            listUrl.add(IMAGES_BASE_URL + fileName);
+        }
+        /*listUrl.add("http://5911011802058.msci.dusit.ac.th/chainat_tourism/images/โฆษณา.png");
+        listUrl.add("http://5911011802058.msci.dusit.ac.th/chainat_tourism/images/สวนนก.png");
+        listUrl.add("http://5911011802058.msci.dusit.ac.th/chainat_tourism/images/สวนส้มโอ.png");*/
+
+        RequestOptions requestOptions = new RequestOptions().fitCenter();
+
+        //.diskCacheStrategy(DiskCacheStrategy.NONE)
+        //.placeholder(R.drawable.placeholder)
+        //.error(R.drawable.placeholder);
+
+        for (int i = 0; i < listUrl.size(); i++) {
+            DefaultSliderView sliderView = new DefaultSliderView(getActivity());
+            sliderView
+                    .image(listUrl.get(i))
+                    .setRequestOption(requestOptions)
+                    //.setBackgroundColor(Color.WHITE)
+                    .setProgressBarVisible(true)
+                    .setOnSliderClickListener(null);
+
+            //add your extra information
+            sliderView.bundle(new Bundle());
+            //sliderView.getBundle().putString("extra", listName.get(i));
+            mSlider.addSlider(sliderView);
+        }
+
+        // set Slider Transition Animation
+        // mSlider.setPresetTransformer(SliderLayout.Transformer.Default);
+        mSlider.setPresetTransformer(SliderLayout.Transformer.Default);
+
+        mSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+        mSlider.setCustomAnimation(new DescriptionAnimation());
+        mSlider.setDuration(3000);
+        mSlider.addOnPageChangeListener(null);
     }
 
     @Override
