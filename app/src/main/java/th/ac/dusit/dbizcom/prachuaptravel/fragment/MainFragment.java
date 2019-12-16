@@ -47,9 +47,9 @@ public class MainFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         if (mPlaceList == null) {
-            doGetPlace();
+            //doGetPlace();
         } else {
-            setupSpinner(view);
+            //setupSpinner(view);
         }
     }
 

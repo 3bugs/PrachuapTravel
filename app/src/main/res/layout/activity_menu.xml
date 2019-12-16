@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context=".MenuActivity">
+
+    <Button
+        android:id="@+id/place_01_button"
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_button_menu"
+        android:textColor="@android:color/white"
+        android:textSize="26sp"
+        app:fontFamily="@font/db_heavent"
+        app:layout_constraintBottom_toTopOf="@+id/place_02_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="อ่าวมะนาว" />
+
+    <Button
+        android:id="@+id/place_02_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_button_menu"
+        android:textColor="@android:color/white"
+        android:textSize="26sp"
+        app:fontFamily="@font/db_heavent"
+        app:layout_constraintBottom_toTopOf="@+id/place_03_button"
+        app:layout_constraintEnd_toEndOf="@+id/place_01_button"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/place_01_button"
+        app:layout_constraintTop_toBottomOf="@+id/place_01_button"
+        tools:text="อ่าวบ่อทองหลาง" />
+
+    <Button
+        android:id="@+id/place_03_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_button_menu"
+        android:textColor="@android:color/white"
+        android:textSize="26sp"
+        app:fontFamily="@font/db_heavent"
+        app:layout_constraintBottom_toTopOf="@+id/place_04_button"
+        app:layout_constraintEnd_toEndOf="@+id/place_02_button"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/place_02_button"
+        app:layout_constraintTop_toBottomOf="@+id/place_02_button"
+        tools:text="น้ำตกห้วยยาง" />
+
+    <Button
+        android:id="@+id/place_04_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_button_menu"
+        android:textColor="@android:color/white"
+        android:textSize="26sp"
+        app:fontFamily="@font/db_heavent"
+        app:layout_constraintBottom_toTopOf="@+id/place_05_button"
+        app:layout_constraintEnd_toEndOf="@+id/place_03_button"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/place_03_button"
+        app:layout_constraintTop_toBottomOf="@+id/place_03_button"
+        tools:text="สวนสนประดิพัทธ์" />
+
+    <Button
+        android:id="@+id/place_05_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/bg_button_menu"
+        android:textColor="@android:color/white"
+        android:textSize="26sp"
+        app:fontFamily="@font/db_heavent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/place_04_button"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/place_04_button"
+        app:layout_constraintTop_toBottomOf="@+id/place_04_button"
+        tools:text="เขาเต่า" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
