@@ -2,6 +2,7 @@ package th.ac.dusit.dbizcom.prachuaptravel;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,12 +38,25 @@ public class PlaceActivity extends AppCompatActivity implements
             ActionBar actionBar = getSupportActionBar();
             if (actionBar != null) {
                 getSupportActionBar().setTitle(mPlace.name);
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             }
 
             getSupportFragmentManager().beginTransaction().replace(
                     R.id.fragment_container,
                     PlacePagerFragment.newInstance(mPlace)
             ).commit();
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                //NavUtils.navigateUpFromSameTask(this);
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }

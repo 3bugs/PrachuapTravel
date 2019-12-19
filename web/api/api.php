@@ -39,6 +39,21 @@ switch ($action) {
     case 'get_place':
         doGetPlace();
         break;
+    case 'update_place':
+        doUpdatePlace();
+        break;
+    case 'delete_place_image':
+        doDeletePlaceImage();
+        break;
+    case 'add_nearby':
+        doAddNearby();
+        break;
+    case 'update_nearby':
+        doUpdateNearby();
+        break;
+    case 'delete_nearby':
+        doDeleteNearby();
+        break;
     default:
         $response[KEY_ERROR_CODE] = ERROR_CODE_ERROR;
         $response[KEY_ERROR_MESSAGE] = 'No action specified or invalid action.';
@@ -138,6 +153,247 @@ function doGetPlace()
     }
 }
 
+function doUpdatePlace()
+{
+    global $db, $response;
+
+    $id = $db->real_escape_string($_POST['placeId']);
+    $name = trim($db->real_escape_string($_POST['name']));
+    $phone = trim($db->real_escape_string($_POST['phone']));
+    $address = trim($db->real_escape_string($_POST['address']));
+    $latitude = $db->real_escape_string($_POST['latitude']);
+    $longitude = $db->real_escape_string($_POST['longitude']);
+    $details = trim($db->real_escape_string($_POST['details']));
+
+    $db->query('START TRANSACTION');
+
+    $sql = "UPDATE prachuap_place 
+                SET name = '$name', details = '$details', phone = '$phone', 
+                    address = '$address', latitude = $latitude, longitude = $longitude 
+                WHERE id = $id";
+
+    if ($result = $db->query($sql)) {
+        for ($i = 0; $i < sizeof($_FILES[KEY_IMAGE_FILES]['name']); $i++) {
+            if ($_FILES[KEY_IMAGE_FILES]['name'][$i] !== '') {
+                $fileName = null;
+
+                if (!moveUploadedFile(KEY_IMAGE_FILES, DIR_IMAGES, $fileName, $i)) {
+                    $db->query('ROLLBACK');
+
+                    $response[KEY_ERROR_CODE] = ERROR_CODE_ERROR;
+                    $errorValue = $_FILES[KEY_IMAGE_FILES]['error'][$i];
+                    $response[KEY_ERROR_MESSAGE] = "เกิดข้อผิดพลาดในการอัพโหลดรูปภาพ [Error: $errorValue]";
+                    $response[KEY_ERROR_MESSAGE_MORE] = '';
+                    return;
+                }
+
+                $sql = "INSERT INTO prachuap_place_image (place_id, image_file_name) 
+                    VALUES ($id, '$fileName')";
+                if (!($insertCourseAssetResult = $db->query($sql))) {
+                    $db->query('ROLLBACK');
+
+                    $response[KEY_ERROR_CODE] = ERROR_CODE_ERROR;
+                    $response[KEY_ERROR_MESSAGE] = 'เกิดข้อผิดพลาดในการบันทึกข้อมูลรูปภาพ Gallery: ' . $db->error;
+                    $response[KEY_ERROR_MESSAGE_MORE] = '';
+                    return;
+                }
+            }
+        }
+
+        $response[KEY_ERROR_CODE] = ERROR_CODE_SUCCESS;
+        $response[KEY_ERROR_MESSAGE] = 'แก้ไขข้อมูลสำเร็จ';
+        $response[KEY_ERROR_MESSAGE_MORE] = '';
+
+        $db->query('COMMIT');
+    } else {
+        $db->query('ROLLBACK');
+
+        $response[KEY_ERROR_CODE] = ERROR_CODE_ERROR;
+        $response[KEY_ERROR_MESSAGE] = 'เกิดข้อผิดพลาดในการแก้ไขข้อมูล: ' . $db->error;
+        $errMessage = $db->error;
+        $response[KEY_ERROR_MESSAGE_MORE] = "$errMessage\nSQL: $sql";
+    }
+}
+
+function doDeletePlaceImage()
+{
+    global $db, $response;
+
+    $assetId = $db->real_escape_string($_POST['assetId']);
+
+    $sql = "DELETE FROM prachuap_place_image WHERE id = $assetId";
+    if ($result = $db->query($sql)) {
+        $response[KEY_ERROR_CODE] = ERROR_CODE_SUCCESS;
+        $response[KEY_ERROR_MESSAGE] = 'ลบข้อมูลสำเร็จ';
+        $response[KEY_ERROR_MESSAGE_MORE] = '';
+    } else {
+        $response[KEY_ERROR_CODE] = ERROR_CODE_ERROR;
+        $response[KEY_ERROR_MESSAGE] = 'เกิดข้อผิดพลาดในการลบข้อมูล';
+        $errMessage = $db->error;
+        $response[KEY_ERROR_MESSAGE_MORE] = "$errMessage\nSQL: $sql";
+    }
+}
+
+function doAddNearby()
+{
+    global $db, $response;
+
+    $name = trim($db->real_escape_string($_POST['name']));
+    $type = $db->real_escape_string($_POST['placeType']);
+    $address = trim($db->real_escape_string($_POST['address']));
+    $phone = trim($db->real_escape_string($_POST['phone']));
+    $details = trim($db->real_escape_string($_POST['details']));
+    $placeId = $db->real_escape_string($_POST['placeId']);
+
+    if (!moveUploadedFile('coverImageFile', DIR_IMAGES, $coverImageFileName)) {
+        $response[KEY_ERROR_CODE] = ERROR_CODE_ERROR;
+        $response[KEY_ERROR_MESSAGE] = 'เกิดข้อผิดพลาดในการอัพโหลดไฟล์ (รูปภาพ Cover)';
+        $response[KEY_ERROR_MESSAGE_MORE] = '';
+        return;
+    }
+
+    $db->query('START TRANSACTION');
+
+    $sql = "INSERT INTO prachuap_nearby (name, type, address, phone, details, cover_image, place_id) 
+                VALUES ('$name', '$type', '$address', '$phone', '$details', '$coverImageFileName', $placeId)";
+    if ($result = $db->query($sql)) {
+        /*$insertId = $db->insert_id;
+
+        for ($i = 0; $i < sizeof($_FILES[KEY_IMAGE_FILES]['name']); $i++) {
+            if ($_FILES[KEY_IMAGE_FILES]['name'][$i] !== '') {
+                $fileName = null;
+
+                if (!moveUploadedFile(KEY_IMAGE_FILES, DIR_IMAGES_GALLERY, $fileName, $i)) {
+                    $db->query('ROLLBACK');
+
+                    $response[KEY_ERROR_CODE] = ERROR_CODE_ERROR;
+                    $errorValue = $_FILES[KEY_IMAGE_FILES]['error'][$i];
+                    $response[KEY_ERROR_MESSAGE] = "เกิดข้อผิดพลาดในการอัพโหลดรูปภาพ [Error: $errorValue]";
+                    $response[KEY_ERROR_MESSAGE_MORE] = '';
+                    return;
+                }
+
+                $sql = "INSERT INTO ct_asset (place_id, image_file_name) 
+                    VALUES ($insertId, '$fileName')";
+                if (!($insertCourseAssetResult = $db->query($sql))) {
+                    $db->query('ROLLBACK');
+
+                    $response[KEY_ERROR_CODE] = ERROR_CODE_ERROR;
+                    $response[KEY_ERROR_MESSAGE] = 'เกิดข้อผิดพลาดในการบันทึกข้อมูลรูปภาพ Gallery: ' . $db->error;
+                    $response[KEY_ERROR_MESSAGE_MORE] = '';
+                    return;
+                }
+            }
+        }*/
+
+        $response[KEY_ERROR_CODE] = ERROR_CODE_SUCCESS;
+        $response[KEY_ERROR_MESSAGE] = 'เพิ่มข้อมูลสำเร็จ';
+        $response[KEY_ERROR_MESSAGE_MORE] = '';
+
+        $db->query('COMMIT');
+    } else {
+        $db->query('ROLLBACK');
+
+        $response[KEY_ERROR_CODE] = ERROR_CODE_ERROR;
+        $response[KEY_ERROR_MESSAGE] = 'เกิดข้อผิดพลาดในการเพิ่มข้อมูล: ' . $db->error;
+        $errMessage = $db->error;
+        $response[KEY_ERROR_MESSAGE_MORE] = "$errMessage\nSQL: $sql";
+    }
+}
+
+function doUpdateNearby()
+{
+    global $db, $response;
+
+    $id = $db->real_escape_string($_POST['id']);
+    $name = trim($db->real_escape_string($_POST['name']));
+    $address = trim($db->real_escape_string($_POST['address']));
+    $phone = trim($db->real_escape_string($_POST['phone']));
+    $details = trim($db->real_escape_string($_POST['details']));
+    $placeId = $db->real_escape_string($_POST['placeId']);
+
+    $coverImageFileName = NULL;
+    if ($_FILES['coverImageFile']['name'] !== '') {
+        if (!moveUploadedFile('coverImageFile', DIR_IMAGES, $coverImageFileName)) {
+            $response[KEY_ERROR_CODE] = ERROR_CODE_ERROR;
+            $response[KEY_ERROR_MESSAGE] = 'เกิดข้อผิดพลาดในการอัพโหลดไฟล์ (รูปภาพ Cover)';
+            $response[KEY_ERROR_MESSAGE_MORE] = '';
+            return;
+        }
+    }
+    $setCoverFileName = $coverImageFileName ? "cover_image = '$coverImageFileName', " : '';
+
+    $db->query('START TRANSACTION');
+
+    $sql = "UPDATE prachuap_nearby 
+                SET $setCoverFileName 
+                    name = '$name', address = '$address', phone = '$phone', 
+                    details = '$details', place_id = $placeId
+                WHERE id = $id";
+
+    if ($result = $db->query($sql)) {
+        /*for ($i = 0; $i < sizeof($_FILES[KEY_IMAGE_FILES]['name']); $i++) {
+            if ($_FILES[KEY_IMAGE_FILES]['name'][$i] !== '') {
+                $fileName = null;
+
+                if (!moveUploadedFile(KEY_IMAGE_FILES, DIR_IMAGES_GALLERY, $fileName, $i)) {
+                    $db->query('ROLLBACK');
+
+                    $response[KEY_ERROR_CODE] = ERROR_CODE_ERROR;
+                    $errorValue = $_FILES[KEY_IMAGE_FILES]['error'][$i];
+                    $response[KEY_ERROR_MESSAGE] = "เกิดข้อผิดพลาดในการอัพโหลดรูปภาพ [Error: $errorValue]";
+                    $response[KEY_ERROR_MESSAGE_MORE] = '';
+                    return;
+                }
+
+                $sql = "INSERT INTO ct_asset (place_id, image_file_name)
+                    VALUES ($id, '$fileName')";
+                if (!($insertCourseAssetResult = $db->query($sql))) {
+                    $db->query('ROLLBACK');
+
+                    $response[KEY_ERROR_CODE] = ERROR_CODE_ERROR;
+                    $response[KEY_ERROR_MESSAGE] = 'เกิดข้อผิดพลาดในการบันทึกข้อมูลรูปภาพ Gallery: ' . $db->error;
+                    $response[KEY_ERROR_MESSAGE_MORE] = '';
+                    return;
+                }
+            }
+        }*/
+
+        $response[KEY_ERROR_CODE] = ERROR_CODE_SUCCESS;
+        $response[KEY_ERROR_MESSAGE] = 'แก้ไขข้อมูลสำเร็จ';
+        $response[KEY_ERROR_MESSAGE_MORE] = '';
+
+        $db->query('COMMIT');
+    } else {
+        $db->query('ROLLBACK');
+
+        $response[KEY_ERROR_CODE] = ERROR_CODE_ERROR;
+        $response[KEY_ERROR_MESSAGE] = 'เกิดข้อผิดพลาดในการแก้ไขข้อมูล: ' . $db->error;
+        $errMessage = $db->error;
+        $response[KEY_ERROR_MESSAGE_MORE] = "$errMessage\nSQL: $sql";
+    }
+}
+
+function doDeleteNearby()
+{
+    global $db, $response;
+
+    $id = $db->real_escape_string($_POST['id']);
+
+    $deleteNewsSql = "DELETE FROM prachuap_nearby WHERE id = $id";
+
+    if ($deleteResult = $db->query($deleteNewsSql)) {
+        $response[KEY_ERROR_CODE] = ERROR_CODE_SUCCESS;
+        $response[KEY_ERROR_MESSAGE] = 'ลบข้อมูลสำเร็จ';
+        $response[KEY_ERROR_MESSAGE_MORE] = '';
+    } else {
+        $response[KEY_ERROR_CODE] = ERROR_CODE_ERROR;
+        $response[KEY_ERROR_MESSAGE] = 'เกิดข้อผิดพลาดในการลบข้อมูล: ' . $db->error;
+        $errMessage = $db->error;
+        $response[KEY_ERROR_MESSAGE_MORE] = "$errMessage\nSQL: $deleteNewsSql";
+    }
+}
+
 function createRandomString($length)
 {
     $key = '';
@@ -150,7 +406,28 @@ function createRandomString($length)
     return $key;
 }
 
-function moveUploadedFile($key, $dest)
+function moveUploadedFile($key, $dest, &$randomFileName, $index = -1)
+{
+    global $response;
+
+    $clientName = $index === -1 ? $_FILES[$key]['name'] : $_FILES[$key]['name'][$index];
+    $response['name'] = $clientName;
+    $response['type'] = $index === -1 ? $_FILES[$key]['type'] : $_FILES[$key]['type'][$index];
+    $response['size'] = $index === -1 ? $_FILES[$key]['size'] : $_FILES[$key]['size'][$index];
+    $response['tmp_name'] = $index === -1 ? $_FILES[$key]['tmp_name'] : $_FILES[$key]['tmp_name'][$index];
+
+    $src = $index === -1 ? $_FILES[$key]['tmp_name'] : $_FILES[$key]['tmp_name'][$index];
+    $response['upload_src'] = $src;
+    $response['upload_dest'] = $dest;
+
+    //$date = date('Y-m-d H:i:s');
+    //$timestamp = time();
+    $timestamp = round(microtime(true) * 1000);
+    $randomFileName = "{$timestamp}-{$clientName}";
+    return move_uploaded_file($src, "{$dest}{$randomFileName}");
+}
+
+function moveUploadedFile_Old($key, $dest)
 {
     global $response;
 

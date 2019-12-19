@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
-    tools:context=".MenuActivity">
+    android:background="@drawable/bg_image"
+    tools:context=".MenuActivity"
+    tools:ignore="HardcodedText">
 
     <Button
         android:id="@+id/place_01_button"
         android:layout_width="220dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:background="@drawable/bg_button_menu"
         android:textColor="@android:color/white"
         android:textSize="26sp"
@@ -20,7 +20,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
         app:layout_constraintVertical_chainStyle="packed"
         tools:text="อ่าวมะนาว" />
 
@@ -88,5 +88,22 @@
         app:layout_constraintStart_toStartOf="@+id/place_04_button"
         app:layout_constraintTop_toBottomOf="@+id/place_04_button"
         tools:text="เขาเต่า" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#e88CA1AB"
+        android:gravity="center"
+        android:letterSpacing="0.25"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:text="PRACHUAP KHIRI KHAN TRAVEL"
+        android:textColor="@android:color/black"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="UnusedAttribute" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
