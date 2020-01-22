@@ -33,7 +33,7 @@ if ($result = $db->query($sql)) {
     }
     $result->close();
 } else {
-    echo 'เกิดข้อผิดพลาดในการเชื่อมต่อฐานข้อมูล';
+    echo 'เกิดข้อผิดพลาดในการเชื่อมต่อฐานข้อมูล: ' . $db->error;
     $db->close();
     exit();
 }

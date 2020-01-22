@@ -47,7 +47,7 @@ public class NearbyFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static NearbyFragment newInstance(Place place, String nearbyType) {
+    static NearbyFragment newInstance(Place place, String nearbyType) {
         NearbyFragment fragment = new NearbyFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PLACE_JSON, new Gson().toJson(place));
@@ -101,7 +101,8 @@ public class NearbyFragment extends Fragment {
         if (getContext() != null) {
             NearbyListAdapter adapter = new NearbyListAdapter(
                     getContext(),
-                    mNearbyList
+                    mNearbyList,
+                    mListener
             );
             mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             mRecyclerView.addItemDecoration(new SpacingDecoration(getContext()));
@@ -127,16 +128,19 @@ public class NearbyFragment extends Fragment {
     }
 
     public interface NearbyFragmentListener {
+        void onClickNearbyItem(Nearby nearby);
     }
 
     private static class NearbyListAdapter extends RecyclerView.Adapter<NearbyListAdapter.ViewHolder> {
 
         private final Context mContext;
         private final List<Nearby> mNearbyList;
+        private final NearbyFragmentListener mListener;
 
-        NearbyListAdapter(Context context, List<Nearby> nearbyList) {
+        NearbyListAdapter(Context context, List<Nearby> nearbyList, NearbyFragmentListener listener) {
             mContext = context;
             mNearbyList = nearbyList;
+            mListener = listener;
         }
 
         @NonNull
@@ -151,6 +155,8 @@ public class NearbyFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             final Nearby nearby = mNearbyList.get(position);
+
+            holder.mNearby = nearby;
 
             CircularProgressDrawable circularProgressDrawable = new CircularProgressDrawable(mContext);
             circularProgressDrawable.setStrokeWidth(5f);
@@ -175,6 +181,7 @@ public class NearbyFragment extends Fragment {
             private final View mRootView;
             private final ImageView mImageView;
             private final TextView mNameTextView;
+            private Nearby mNearby;
 
             ViewHolder(View itemView) {
                 super(itemView);
@@ -186,7 +193,9 @@ public class NearbyFragment extends Fragment {
                 mRootView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
+                        if (mListener != null) {
+                            mListener.onClickNearbyItem(mNearby);
+                        }
                     }
                 });
             }

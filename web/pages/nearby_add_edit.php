@@ -66,12 +66,12 @@ if ($result = $db->query($sql)) {
     exit();
 }
 
-if (false) {
+if (true) {
     $imageList = array();
     if (isset($placeId)) {
         $sql = "SELECT * 
-            FROM ct_asset 
-            WHERE place_id = $placeId";
+            FROM prachuap_nearby_image 
+            WHERE nearby_id = $placeId";
         if ($result = $db->query($sql)) {
             while ($row = $result->fetch_assoc()) {
                 $asset = array();
@@ -424,7 +424,7 @@ if (false) {
                             <!-- /.box -->
 
                             <?php
-                            if (false) {
+                            if (true) {
                                 ?>
                                 <!--รูปภาพ Gallery-->
                                 <div class="box box-warning">
@@ -493,8 +493,8 @@ if (false) {
                                                                 <tr>
                                                                     <!--<td><?php /*echo $image['title']; */ ?></td>-->
                                                                     <td style="text-align: center">
-                                                                        <a href="<?php echo(DIR_IMAGES_GALLERY . $image['image_file_name']); ?>" data-lightbox="placeImage">
-                                                                            <img src="<?php echo(DIR_IMAGES_GALLERY . $image['image_file_name']); ?>"
+                                                                        <a href="<?php echo(DIR_IMAGES . $image['image_file_name']); ?>" data-lightbox="placeImage">
+                                                                            <img src="<?php echo(DIR_IMAGES . $image['image_file_name']); ?>"
                                                                                  height="120px">
                                                                         </a>
                                                                     </td>
@@ -929,7 +929,7 @@ if (false) {
 
         function doDeleteAsset(assetId, assetType) {
             $.post(
-                '../api/api.php/delete_place_asset',
+                '../api/api.php/delete_nearby_image',
                 {
                     assetId: assetId,
                 }

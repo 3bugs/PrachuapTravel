@@ -11,6 +11,7 @@ import th.ac.dusit.dbizcom.prachuaptravel.fragment.MainFragment;
 import th.ac.dusit.dbizcom.prachuaptravel.fragment.MapsFragment;
 import th.ac.dusit.dbizcom.prachuaptravel.fragment.NearbyFragment;
 import th.ac.dusit.dbizcom.prachuaptravel.fragment.PlaceFragment;
+import th.ac.dusit.dbizcom.prachuaptravel.model.Nearby;
 
 public class MainActivity extends AppCompatActivity implements
         MainFragment.MainFragmentListener,
@@ -19,6 +20,11 @@ public class MainActivity extends AppCompatActivity implements
         MapsFragment.MapsFragmentListener {
 
     public static final String TAG_FRAGMENT_MAIN = "main_fragment";
+
+    @Override
+    public void onClickNearbyItem(Nearby nearby) {
+
+    }
 
     protected enum FragmentTransitionType {
         NONE,

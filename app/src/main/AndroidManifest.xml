@@ -11,22 +11,24 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-
+        <activity android:name=".NearbyDetailsActivity"></activity>
         <activity
             android:name=".PlaceActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait">
 
-            <!--<meta-data
+            <!--
+                <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MenuActivity" />-->
+                android:value=".MenuActivity" />
+            -->
 
         </activity>
         <activity
             android:name=".MenuActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -48,6 +50,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".TempActivity" />
-
     </application>
+
 </manifest>

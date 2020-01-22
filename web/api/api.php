@@ -54,6 +54,9 @@ switch ($action) {
     case 'delete_nearby':
         doDeleteNearby();
         break;
+    case 'delete_nearby_image':
+        doDeleteNearbyImage();
+        break;
     default:
         $response[KEY_ERROR_CODE] = ERROR_CODE_ERROR;
         $response[KEY_ERROR_MESSAGE] = 'No action specified or invalid action.';
@@ -81,8 +84,11 @@ function doGetPlace()
             $place['id'] = (int)$row['id'];
             $place['name'] = $row['name'];
             $place['details'] = $row['details'];
+            $place['activity_details'] = $row['activity_details'];
+            $place['activity_image'] = $row['activity_image'];
             $place['address'] = $row['address'];
             $place['phone'] = $row['phone'];
+            $place['opening_time'] = $row['opening_time'];
             $place['latitude'] = floatval($row['latitude']);
             $place['longitude'] = floatval($row['longitude']);
             $place['image_list'] = array();
@@ -113,6 +119,7 @@ function doGetPlace()
                     $nearby['cover_image'] = $nearbyRow['cover_image'];
                     $nearby['address'] = $nearbyRow['address'];
                     $nearby['phone'] = $nearbyRow['phone'];
+                    $nearby['opening_time'] = $nearbyRow['opening_time'];
                     $nearby['type'] = $nearbyRow['type'];
                     $nearby['image_list'] = array();
 
@@ -163,13 +170,28 @@ function doUpdatePlace()
     $address = trim($db->real_escape_string($_POST['address']));
     $latitude = $db->real_escape_string($_POST['latitude']);
     $longitude = $db->real_escape_string($_POST['longitude']);
+    $openingTime = $db->real_escape_string($_POST['openingTime']);
     $details = trim($db->real_escape_string($_POST['details']));
+    $activityDetails = trim($db->real_escape_string($_POST['activityDetails']));
+
+    $coverImageFileName = NULL;
+    if ($_FILES['coverImageFile']['name'] !== '') {
+        if (!moveUploadedFile('coverImageFile', DIR_IMAGES, $coverImageFileName)) {
+            $response[KEY_ERROR_CODE] = ERROR_CODE_ERROR;
+            $response[KEY_ERROR_MESSAGE] = 'เกิดข้อผิดพลาดในการอัพโหลดไฟล์ (รูปภาพหน้ากิจกรรม)';
+            $response[KEY_ERROR_MESSAGE_MORE] = '';
+            return;
+        }
+    }
+    $setCoverFileName = $coverImageFileName ? "activity_image = '$coverImageFileName', " : '';
 
     $db->query('START TRANSACTION');
 
     $sql = "UPDATE prachuap_place 
-                SET name = '$name', details = '$details', phone = '$phone', 
-                    address = '$address', latitude = $latitude, longitude = $longitude 
+                SET $setCoverFileName
+                    name = '$name', details = '$details', phone = '$phone', 
+                    address = '$address', latitude = $latitude, longitude = $longitude,
+                    opening_time = '$openingTime', activity_details = '$activityDetails'
                 WHERE id = $id";
 
     if ($result = $db->query($sql)) {
@@ -257,13 +279,13 @@ function doAddNearby()
     $sql = "INSERT INTO prachuap_nearby (name, type, address, phone, details, cover_image, place_id) 
                 VALUES ('$name', '$type', '$address', '$phone', '$details', '$coverImageFileName', $placeId)";
     if ($result = $db->query($sql)) {
-        /*$insertId = $db->insert_id;
+        $insertId = $db->insert_id;
 
         for ($i = 0; $i < sizeof($_FILES[KEY_IMAGE_FILES]['name']); $i++) {
             if ($_FILES[KEY_IMAGE_FILES]['name'][$i] !== '') {
                 $fileName = null;
 
-                if (!moveUploadedFile(KEY_IMAGE_FILES, DIR_IMAGES_GALLERY, $fileName, $i)) {
+                if (!moveUploadedFile(KEY_IMAGE_FILES, DIR_IMAGES, $fileName, $i)) {
                     $db->query('ROLLBACK');
 
                     $response[KEY_ERROR_CODE] = ERROR_CODE_ERROR;
@@ -273,7 +295,7 @@ function doAddNearby()
                     return;
                 }
 
-                $sql = "INSERT INTO ct_asset (place_id, image_file_name) 
+                $sql = "INSERT INTO prachuap_nearby_image (nearby_id, image_file_name) 
                     VALUES ($insertId, '$fileName')";
                 if (!($insertCourseAssetResult = $db->query($sql))) {
                     $db->query('ROLLBACK');
@@ -284,7 +306,7 @@ function doAddNearby()
                     return;
                 }
             }
-        }*/
+        }
 
         $response[KEY_ERROR_CODE] = ERROR_CODE_SUCCESS;
         $response[KEY_ERROR_MESSAGE] = 'เพิ่มข้อมูลสำเร็จ';
@@ -332,11 +354,11 @@ function doUpdateNearby()
                 WHERE id = $id";
 
     if ($result = $db->query($sql)) {
-        /*for ($i = 0; $i < sizeof($_FILES[KEY_IMAGE_FILES]['name']); $i++) {
+        for ($i = 0; $i < sizeof($_FILES[KEY_IMAGE_FILES]['name']); $i++) {
             if ($_FILES[KEY_IMAGE_FILES]['name'][$i] !== '') {
                 $fileName = null;
 
-                if (!moveUploadedFile(KEY_IMAGE_FILES, DIR_IMAGES_GALLERY, $fileName, $i)) {
+                if (!moveUploadedFile(KEY_IMAGE_FILES, DIR_IMAGES, $fileName, $i)) {
                     $db->query('ROLLBACK');
 
                     $response[KEY_ERROR_CODE] = ERROR_CODE_ERROR;
@@ -346,7 +368,7 @@ function doUpdateNearby()
                     return;
                 }
 
-                $sql = "INSERT INTO ct_asset (place_id, image_file_name)
+                $sql = "INSERT INTO prachuap_nearby_image (nearby_id, image_file_name)
                     VALUES ($id, '$fileName')";
                 if (!($insertCourseAssetResult = $db->query($sql))) {
                     $db->query('ROLLBACK');
@@ -357,7 +379,7 @@ function doUpdateNearby()
                     return;
                 }
             }
-        }*/
+        }
 
         $response[KEY_ERROR_CODE] = ERROR_CODE_SUCCESS;
         $response[KEY_ERROR_MESSAGE] = 'แก้ไขข้อมูลสำเร็จ';
@@ -383,16 +405,45 @@ function doDeleteNearby()
     $deleteNewsSql = "DELETE FROM prachuap_nearby WHERE id = $id";
 
     if ($deleteResult = $db->query($deleteNewsSql)) {
+        $deletePlaceAssetsSql = "DELETE FROM prachuap_nearby_image WHERE nearby_id = $id";
+
+        if ($deletePlaceAssetsResult = $db->query($deletePlaceAssetsSql)) {
+            $response[KEY_ERROR_CODE] = ERROR_CODE_SUCCESS;
+            $response[KEY_ERROR_MESSAGE] = 'ลบข้อมูลสำเร็จ';
+            $response[KEY_ERROR_MESSAGE_MORE] = '';
+        } else {
+            $response[KEY_ERROR_CODE] = ERROR_CODE_ERROR;
+            $response[KEY_ERROR_MESSAGE] = 'เกิดข้อผิดพลาดในการลบข้อมูล (2): ' . $db->error;
+            $errMessage = $db->error;
+            $response[KEY_ERROR_MESSAGE_MORE] = "$errMessage\nSQL: $deletePlaceAssetsSql";
+        }
+    } else {
+        $response[KEY_ERROR_CODE] = ERROR_CODE_ERROR;
+        $response[KEY_ERROR_MESSAGE] = 'เกิดข้อผิดพลาดในการลบข้อมูล (1): ' . $db->error;
+        $errMessage = $db->error;
+        $response[KEY_ERROR_MESSAGE_MORE] = "$errMessage\nSQL: $deleteNewsSql";
+    }
+}
+
+function doDeleteNearbyImage()
+{
+    global $db, $response;
+
+    $assetId = $db->real_escape_string($_POST['assetId']);
+
+    $sql = "DELETE FROM prachuap_nearby_image WHERE id = $assetId";
+    if ($result = $db->query($sql)) {
         $response[KEY_ERROR_CODE] = ERROR_CODE_SUCCESS;
         $response[KEY_ERROR_MESSAGE] = 'ลบข้อมูลสำเร็จ';
         $response[KEY_ERROR_MESSAGE_MORE] = '';
     } else {
         $response[KEY_ERROR_CODE] = ERROR_CODE_ERROR;
-        $response[KEY_ERROR_MESSAGE] = 'เกิดข้อผิดพลาดในการลบข้อมูล: ' . $db->error;
+        $response[KEY_ERROR_MESSAGE] = 'เกิดข้อผิดพลาดในการลบข้อมูล';
         $errMessage = $db->error;
-        $response[KEY_ERROR_MESSAGE_MORE] = "$errMessage\nSQL: $deleteNewsSql";
+        $response[KEY_ERROR_MESSAGE_MORE] = "$errMessage\nSQL: $sql";
     }
 }
+
 
 function createRandomString($length)
 {

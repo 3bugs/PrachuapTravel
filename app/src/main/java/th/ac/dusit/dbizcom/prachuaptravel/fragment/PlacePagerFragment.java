@@ -84,10 +84,12 @@ public class PlacePagerFragment extends Fragment {
                 case 0:
                     return PlaceFragment.newInstance(mPlace);
                 case 1:
-                    return NearbyFragment.newInstance(mPlace, "restaurant");
+                    return ActivityFragment.newInstance(mPlace);
                 case 2:
-                    return NearbyFragment.newInstance(mPlace, "hotel");
+                    return NearbyFragment.newInstance(mPlace, "restaurant");
                 case 3:
+                    return NearbyFragment.newInstance(mPlace, "hotel");
+                case 4:
                     return MapsFragment.newInstance(mPlace);
                 default:
                     return PlaceFragment.newInstance(mPlace);
@@ -96,7 +98,7 @@ public class PlacePagerFragment extends Fragment {
 
         @Override
         public int getCount() {
-            return 4;
+            return 5;
         }
 
         @Nullable
@@ -108,12 +110,15 @@ public class PlacePagerFragment extends Fragment {
                     title = "รายละเอียด";
                     break;
                 case 1:
-                    title = "ร้านอาหารใกล้เคียง";
+                    title = "กิจกรรม";
                     break;
                 case 2:
-                    title = "ที่พักใกล้เคียง";
+                    title = "ร้านอาหารใกล้เคียง";
                     break;
                 case 3:
+                    title = "ที่พักใกล้เคียง";
+                    break;
+                case 4:
                     title = "Google Maps";
                     break;
             }

@@ -182,7 +182,7 @@ if (isset($placeId)) {
 
                                     <!--ชื่อ-->
                                     <div class="row">
-                                        <div class="col-md-8">
+                                        <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="inputName">ชื่อ<?= $pageTitle; ?>:</label>
                                                 <div class="input-group">
@@ -201,7 +201,7 @@ if (isset($placeId)) {
                                         </div>
 
                                         <!--เบอร์โทร-->
-                                        <div class="col-md-4">
+                                        <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="inputPhone">เบอร์โทร:</label>
                                                 <div class="input-group">
@@ -221,27 +221,27 @@ if (isset($placeId)) {
                                     </div>
 
                                     <div class="row">
-                                        <!--ที่อยู่-->
-                                        <div class="col-md-8">
+                                        <!--เวลาทำการ-->
+                                        <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="inputAddress">ที่อยู่:</label>
+                                                <label for="inputOpeningTime">เวลาทำการ:</label>
                                                 <div class="input-group">
                                                 <span class="input-group-addon">
-                                                    <i class="fa fa-envelope-o"></i>
+                                                    <i class="fa fa-clock-o"></i>
                                                 </span>
                                                     <input type="text" class="form-control"
-                                                           id="inputAddress"
-                                                           name="address"
-                                                           value="<?php echo(!empty($place) ? $place['address'] : ''); ?>"
-                                                           placeholder="กรอกที่อยู่" required
-                                                           oninvalid="this.setCustomValidity('กรอกที่อยู่')"
+                                                           id="inputOpeningTime"
+                                                           name="openingTime"
+                                                           value="<?php echo(!empty($place) ? $place['opening_time'] : ''); ?>"
+                                                           placeholder="กรอกเวลาทำการ" required
+                                                           oninvalid="this.setCustomValidity('กรอกเวลาทำการ')"
                                                            oninput="this.setCustomValidity('')">
                                                 </div>
                                             </div>
                                         </div>
 
                                         <!--ละติจูด-->
-                                        <div class="col-md-2">
+                                        <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="inputLatitude">ละติจูด:</label>
                                                 <div class="input-group">
@@ -260,7 +260,7 @@ if (isset($placeId)) {
                                         </div>
 
                                         <!--ลองจิจูด-->
-                                        <div class="col-md-2">
+                                        <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="inputLongitude">ลองจิจูด:</label>
                                                 <div class="input-group">
@@ -278,6 +278,27 @@ if (isset($placeId)) {
                                             </div>
                                         </div>
                                     </div>
+
+                                    <div class="row">
+                                        <!--ที่อยู่-->
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="inputAddress">ที่อยู่:</label>
+                                                <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="fa fa-envelope-o"></i>
+                                                </span>
+                                                    <input type="text" class="form-control"
+                                                           id="inputAddress"
+                                                           name="address"
+                                                           value="<?php echo(!empty($place) ? $place['address'] : ''); ?>"
+                                                           placeholder="กรอกที่อยู่" required
+                                                           oninvalid="this.setCustomValidity('กรอกที่อยู่')"
+                                                           oninput="this.setCustomValidity('')">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <!-- /.box-body -->
                             </div>
@@ -286,7 +307,7 @@ if (isset($placeId)) {
                             <!--content editor-->
                             <div class="box box-warning">
                                 <div class="box-header with-border">
-                                    <h3 class="box-title">รายละเอียด
+                                    <h3 class="box-title">รายละเอียด<?= $pageTitle; ?>
                                         <small>&nbsp;</small>
                                     </h3>
                                     <!-- tools box -->
@@ -302,101 +323,18 @@ if (isset($placeId)) {
                                 <div class="box-body pad">
                                 <textarea id="editor" rows="10" cols="120"
                                           name="details" required
-                                          placeholder="กรอกรายละเอียด"
-                                          oninvalid="this.setCustomValidity('กรอกรายละเอียด')"
+                                          placeholder="กรอกรายละเอียด<?= $pageTitle; ?>"
+                                          oninvalid="this.setCustomValidity('กรอกรายละเอียด<?= $pageTitle; ?>')"
                                           oninput="this.setCustomValidity('')"
                                           style="padding: 6px 10px"><?= (!empty($place) ? $place['details'] : ''); ?></textarea>
                                 </div>
                             </div>
                             <!-- /.box -->
 
-                            <?php
-                            if (false) {
-                                ?>
-                                <!--รูปภาพหน้า List-->
-                                <div class="box box-warning">
-                                    <div class="box-header with-border">
-                                        <h3 class="box-title">รูปภาพหน้า List
-                                            <!--<small></small>-->
-                                        </h3>
-
-                                        <!-- tools box -->
-                                        <div class="pull-right box-tools">
-                                            <button type="button" class="btn btn-box-tool" data-widget="collapse"
-                                                    data-toggle="tooltip" title="ย่อ">
-                                                <i class="fa fa-minus"></i>
-                                            </button>
-                                        </div>
-                                        <!-- /. tools -->
-                                    </div>
-                                    <!-- /.box-header -->
-                                    <div class="box-body pad" style="background_: #f8f8f8">
-                                        <?php
-                                        if (!empty($place)) {
-                                            ?>
-                                            <!-- Custom Tabs -->
-                                            <div class="nav-tabs-custom">
-                                                <ul class="nav nav-tabs">
-                                                    <li class="active"><a href="#cover_image_tab_1" data-toggle="tab">รูปภาพปัจจุบัน</a></li>
-                                                    <li><a href="#cover_image_tab_2" data-toggle="tab">อัพโหลดรูปภาพใหม่</a></li>
-                                                </ul>
-                                                <div class="tab-content">
-                                                    <div class="tab-pane active" id="cover_image_tab_1">
-                                                        <div style="padding: 5px">
-                                                            <!--<a target="_blank" href="<?php /*echo(DIR_IMAGES . $place['image_file_name']); */ ?>">แสดงรูปภาพในหน้าจอใหม่</a>-->
-                                                        </div>
-                                                        <a href="<?= (DIR_IMAGES . ($place['cover_image'] ? $place['cover_image'] : 'ic_no_image_2.png')); ?>"
-                                                           data-lightbox="coverImage" data-title="<?= $place['title']; ?>">
-                                                            <img src="<?= (DIR_IMAGES . ($place['cover_image'] ? $place['cover_image'] : 'ic_no_image_2.png')); ?>"
-                                                                 width="<?= $place['cover_image'] ? '300px' : '100px'; ?>">
-                                                        </a>
-                                                    </div>
-                                                    <!-- /.tab-pane -->
-                                                    <div class="tab-pane" id="cover_image_tab_2" style="padding: 0px">
-                                                        <ul style="color: orangered; margin-top: 10px; margin-bottom: 15px">
-                                                            <li>คลิกในกรอบสี่เหลี่ยมเพื่อเลือกไฟล์ หรือลากไฟล์มาปล่อยในกรอบสี่เหลี่ยม</li>
-                                                            <li>รูปภาพที่อัพโหลดใหม่ จะแทนที่รูปภาพปัจจุบัน</li>
-                                                            <li>ไฟล์จะถูกบันทึกเข้าสู่ระบบ หลังจากกดปุ่ม "บันทึก"</li>
-                                                        </ul>
-                                                        <input id="cover-image-file-upload" name="coverImageFile"
-                                                               type="file" accept="image/*"
-                                                               style="width: 500px; margin-top: 10px; border: 2px dotted #ccc; padding: 10px 10px 50px 10px"/>
-                                                        <div id="cover-image-upload-preview"
-                                                             style="background: #efffd1; padding: 10px;"></div>
-                                                    </div>
-                                                    <!-- /.tab-pane -->
-                                                </div>
-                                                <!-- /.tab-content -->
-                                            </div>
-                                            <!-- nav-tabs-custom -->
-                                            <?php
-                                        } else {
-                                            ?>
-                                            <ul style="color: orangered; margin-top: 10px; margin-bottom: 15px">
-                                                <li>คลิกในกรอบสี่เหลี่ยมเพื่อเลือกไฟล์ หรือลากไฟล์มาปล่อยในกรอบสี่เหลี่ยม</li>
-                                                <li>ไฟล์จะถูกบันทึกเข้าสู่ระบบ หลังจากกดปุ่ม "บันทึก"</li>
-                                            </ul>
-                                            <input id="cover-image-file-upload" name="coverImageFile" required
-                                                   type="file" accept="image/*"
-                                                   style="width: 500px; margin-top: 10px; margin-bottom: 10px; border: 2px dotted #ccc; padding: 10px 10px 50px 10px"
-                                                   oninvalid="this.setCustomValidity('เลือกรูปภาพหน้า List')"
-                                                   oninput="this.setCustomValidity('')"/>
-                                            <div id="cover-image-upload-preview"
-                                                 style="background: #efffd1; padding: 10px;"></div>
-                                            <?php
-                                        }
-                                        ?>
-                                    </div>
-                                </div>
-                                <!-- /.box -->
-                                <?php
-                            }
-                            ?>
-
                             <!--รูปภาพ Gallery-->
                             <div class="box box-warning">
                                 <div class="box-header with-border">
-                                    <h3 class="box-title">รูปภาพ
+                                    <h3 class="box-title">รูปภาพ<?= $pageTitle; ?>
                                         <!--<small>อัพโหลดรูปภาพ</small>-->
                                     </h3>
                                     <!-- tools box -->
@@ -509,6 +447,116 @@ if (isset($placeId)) {
                                 </div>
                             </div>
                             <!-- /.box -->
+
+                            <!--content editor-->
+                            <div class="box box-success">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">รายละเอียดหน้ากิจกรรม
+                                        <small>&nbsp;</small>
+                                    </h3>
+                                    <!-- tools box -->
+                                    <div class="pull-right box-tools">
+                                        <button type="button" class="btn btn-box-tool" data-widget="collapse"
+                                                data-toggle="tooltip" title="ย่อ">
+                                            <i class="fa fa-minus"></i>
+                                        </button>
+                                    </div>
+                                    <!-- /. tools -->
+                                </div>
+                                <!-- /.box-header -->
+                                <div class="box-body pad">
+                                <textarea id="activityEditor" rows="10" cols="120"
+                                          name="activityDetails" required
+                                          placeholder="กรอกรายละเอียดหน้ากิจกรรม"
+                                          oninvalid="this.setCustomValidity('กรอกรายละเอียดหน้ากิจกรรม')"
+                                          oninput="this.setCustomValidity('')"
+                                          style="padding: 6px 10px"><?= (!empty($place) ? $place['activity_details'] : ''); ?></textarea>
+                                </div>
+                            </div>
+                            <!-- /.box -->
+
+                            <?php
+                            if (true) {
+                                ?>
+                                <!--รูปภาพกิจกรรม-->
+                                <div class="box box-success">
+                                    <div class="box-header with-border">
+                                        <h3 class="box-title">รูปภาพหน้ากิจกรรม
+                                            <!--<small></small>-->
+                                        </h3>
+
+                                        <!-- tools box -->
+                                        <div class="pull-right box-tools">
+                                            <button type="button" class="btn btn-box-tool" data-widget="collapse"
+                                                    data-toggle="tooltip" title="ย่อ">
+                                                <i class="fa fa-minus"></i>
+                                            </button>
+                                        </div>
+                                        <!-- /. tools -->
+                                    </div>
+                                    <!-- /.box-header -->
+                                    <div class="box-body pad" style="background_: #f8f8f8">
+                                        <?php
+                                        if (!empty($place)) {
+                                            ?>
+                                            <!-- Custom Tabs -->
+                                            <div class="nav-tabs-custom">
+                                                <ul class="nav nav-tabs">
+                                                    <li class="active"><a href="#cover_image_tab_1" data-toggle="tab">รูปภาพปัจจุบัน</a></li>
+                                                    <li><a href="#cover_image_tab_2" data-toggle="tab">อัพโหลดรูปภาพใหม่</a></li>
+                                                </ul>
+                                                <div class="tab-content">
+                                                    <div class="tab-pane active" id="cover_image_tab_1">
+                                                        <div style="padding: 5px">
+                                                            <!--<a target="_blank" href="<?php /*echo(DIR_IMAGES . $place['image_file_name']); */ ?>">แสดงรูปภาพในหน้าจอใหม่</a>-->
+                                                        </div>
+                                                        <a href="<?= (DIR_IMAGES . ($place['activity_image'] ? $place['activity_image'] : 'ic_no_image_2.png')); ?>"
+                                                           data-lightbox="coverImage" data-title="<?= $place['title']; ?>">
+                                                            <img src="<?= (DIR_IMAGES . ($place['activity_image'] ? $place['activity_image'] : 'ic_no_image_2.png')); ?>"
+                                                                 width="<?= $place['activity_image'] ? '300px' : '100px'; ?>">
+                                                        </a>
+                                                    </div>
+                                                    <!-- /.tab-pane -->
+                                                    <div class="tab-pane" id="cover_image_tab_2" style="padding: 0px">
+                                                        <ul style="color: orangered; margin-top: 10px; margin-bottom: 15px">
+                                                            <li>คลิกในกรอบสี่เหลี่ยมเพื่อเลือกไฟล์ หรือลากไฟล์มาปล่อยในกรอบสี่เหลี่ยม</li>
+                                                            <li>รูปภาพที่อัพโหลดใหม่ จะแทนที่รูปภาพปัจจุบัน</li>
+                                                            <li>ไฟล์จะถูกบันทึกเข้าสู่ระบบ หลังจากกดปุ่ม "บันทึก"</li>
+                                                        </ul>
+                                                        <input id="cover-image-file-upload" name="coverImageFile"
+                                                               type="file" accept="image/*"
+                                                               style="width: 500px; margin-top: 10px; border: 2px dotted #ccc; padding: 10px 10px 50px 10px"/>
+                                                        <div id="cover-image-upload-preview"
+                                                             style="background: #efffd1; padding: 10px;"></div>
+                                                    </div>
+                                                    <!-- /.tab-pane -->
+                                                </div>
+                                                <!-- /.tab-content -->
+                                            </div>
+                                            <!-- nav-tabs-custom -->
+                                            <?php
+                                        } else {
+                                            ?>
+                                            <ul style="color: orangered; margin-top: 10px; margin-bottom: 15px">
+                                                <li>คลิกในกรอบสี่เหลี่ยมเพื่อเลือกไฟล์ หรือลากไฟล์มาปล่อยในกรอบสี่เหลี่ยม</li>
+                                                <li>ไฟล์จะถูกบันทึกเข้าสู่ระบบ หลังจากกดปุ่ม "บันทึก"</li>
+                                            </ul>
+                                            <input id="cover-image-file-upload" name="coverImageFile" required
+                                                   type="file" accept="image/*"
+                                                   style="width: 500px; margin-top: 10px; margin-bottom: 10px; border: 2px dotted #ccc; padding: 10px 10px 50px 10px"
+                                                   oninvalid="this.setCustomValidity('เลือกรูปภาพหน้า List')"
+                                                   oninput="this.setCustomValidity('')"/>
+                                            <div id="cover-image-upload-preview"
+                                                 style="background: #efffd1; padding: 10px;"></div>
+                                            <?php
+                                        }
+                                        ?>
+                                    </div>
+                                </div>
+                                <!-- /.box -->
+                                <?php
+                            }
+                            ?>
 
                             <!--ปุ่ม "บันทึก"-->
                             <div class="row">

@@ -75,6 +75,9 @@ public class PlaceFragment extends Fragment {
         TextView phoneTextView = view.findViewById(R.id.phone_text_view);
         phoneTextView.setText(mPlace.phone);
 
+        TextView openingTimeTextView = view.findViewById(R.id.opening_time_text_view);
+        openingTimeTextView.setText(mPlace.openingTime);
+
         setupImageSlider(view);
     }
 

@@ -90,7 +90,7 @@ public class MainFragment extends Fragment {
 
     private void setupSpinner(@NonNull View view) {
         mPlaceList.add(new Place(
-                0, "เลือกสถานที่", null, null, null, 0, 0, null, null
+                0, "เลือกสถานที่", null, null, null, null, null, null, 0, 0, null, null
         ));
 
         Spinner placeSpinner = view.findViewById(R.id.place_spinner);

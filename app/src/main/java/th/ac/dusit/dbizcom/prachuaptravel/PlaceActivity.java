@@ -9,14 +9,19 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
 
+import th.ac.dusit.dbizcom.prachuaptravel.fragment.ActivityFragment;
 import th.ac.dusit.dbizcom.prachuaptravel.fragment.MapsFragment;
 import th.ac.dusit.dbizcom.prachuaptravel.fragment.NearbyFragment;
 import th.ac.dusit.dbizcom.prachuaptravel.fragment.PlaceFragment;
 import th.ac.dusit.dbizcom.prachuaptravel.fragment.PlacePagerFragment;
+import th.ac.dusit.dbizcom.prachuaptravel.model.Nearby;
 import th.ac.dusit.dbizcom.prachuaptravel.model.Place;
+
+import static th.ac.dusit.dbizcom.prachuaptravel.NearbyDetailsActivity.KEY_NEARBY_JSON;
 
 public class PlaceActivity extends AppCompatActivity implements
         PlaceFragment.PlaceFragmentListener,
+        ActivityFragment.ActivityFragmentListener,
         NearbyFragment.NearbyFragmentListener,
         MapsFragment.MapsFragmentListener {
 
@@ -58,5 +63,14 @@ public class PlaceActivity extends AppCompatActivity implements
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onClickNearbyItem(Nearby nearby) {
+        String nearbyJson = new Gson().toJson(nearby);
+
+        Intent intent = new Intent(this, NearbyDetailsActivity.class);
+        intent.putExtra(KEY_NEARBY_JSON, nearbyJson);
+        startActivity(intent);
     }
 }
